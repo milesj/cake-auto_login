@@ -153,8 +153,9 @@ class AutoLoginComponent extends Object {
 			}
 		}
 
-		if (!empty($this->Auth->userModel) && empty($this->settings['controller'])) {
-			$this->settings['controller'] = Inflector::pluralize($this->Auth->userModel);
+		list(, $UserModel) = pluginSplit($this->Auth->userModel);
+		if (!empty($UserModel) && empty($this->settings['controller'])) {
+			$this->settings['controller'] = Inflector::pluralize($UserModel);
 		}
 
 		// Is called after user login/logout validates, but befire auth redirects
@@ -163,8 +164,8 @@ class AutoLoginComponent extends Object {
 
 			switch ($this->Controller->action) {
 				case $this->settings['loginAction']:
-					if (isset($data[$this->Auth->userModel])) {
-						$formData = $data[$this->Auth->userModel];
+					if (isset($data[$UserModel])) {
+						$formData = $data[$UserModel];
 						$username = $formData[$this->Auth->fields['username']];
 						$password = $formData[$this->Auth->fields['password']];
 						$autoLogin = isset($formData['auto_login']) ? $formData['auto_login'] : 0;
