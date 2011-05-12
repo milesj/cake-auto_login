@@ -137,6 +137,8 @@ class AutoLoginComponent extends Object {
 			if (in_array('_autoLogin', get_class_methods($Controller))) {
 				call_user_func_array(array($Controller, '_autoLogin'), array($user));
 			}
+			$Controller->Session->delete('Message.auth');
+			$Controller->redirect($this->Auth->redirect());
 		} else {
 			$this->debug('loginFail', $this->Cookie, $user);
 
