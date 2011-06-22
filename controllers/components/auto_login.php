@@ -124,7 +124,7 @@ class AutoLoginComponent extends Object {
 			$this->delete();
 			return;
 
-		} else if ($cookie['hash'] != $this->Auth->password($cookie[$this->Auth->fields['username']] . $cookie['time'])) {
+		} else if (!empty($cookie['hash']) && !empty($cookie['time']) && !empty($this->Auth->fields['username']) && $cookie['hash'] != $this->Auth->password($cookie[$this->Auth->fields['username']] . $cookie['time'])) {
 			$this->debug('hashFail', $this->Cookie, $user);
 			$this->delete();
 			return;
