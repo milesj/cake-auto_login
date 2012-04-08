@@ -154,7 +154,7 @@ class AutoLoginComponent extends Component {
 	 * @return void
 	 */
 	public function beforeRedirect(Controller $controller, $url, $status = null, $exit = true) {
-		if (empty($this->settings['active'])) {
+		if (!$this->settings['active']) {
 			return;
 		}
 		$model = $this->settings['model'];
