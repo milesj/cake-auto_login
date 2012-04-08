@@ -77,7 +77,7 @@ class AutoLoginComponent extends Component {
 	 * @return void
 	 */
 	public function initialize(Controller $controller) {
-		$this->settings = array_merge($this->_defaults, (array) Configure::read('AutoLogin'));
+		$this->settings = array_merge($this->_defaults, (array)Configure::read('AutoLogin'));
 
 		// Validate the cookie
 		$cookie = $this->Cookie->read($this->settings['cookieName']);
@@ -85,7 +85,7 @@ class AutoLoginComponent extends Component {
 	
 		// Is debug enabled
 		if ($this->settings['debug'] === null) {
-			$this->settings['debug'] = Configure::read('debug') > 0 || !empty($autoLogin['email']) && !empty($autoLogin['ips']) && in_array(env('REMOTE_ADDR'), (array) $autoLogin['ips']);
+			$this->settings['debug'] = Configure::read('debug') > 0 || !empty($autoLogin['email']) && !empty($autoLogin['ips']) && in_array(env('REMOTE_ADDR'), (array)$autoLogin['ips']);
 		}
 
 		if (!$this->settings['active'] || !empty($user) || !$cookie || !$controller->request->is('get')) {
@@ -96,7 +96,7 @@ class AutoLoginComponent extends Component {
 			$this->delete();
 			return;
 
-		} elseif ($cookie['hash'] != $this->Auth->password($cookie['username'] . $cookie['time'])) {
+		} elseif (empty($cookie['hash']) || $cookie['hash'] != $this->Auth->password($cookie['username'] . $cookie['time'])) {
 			$this->debug('hashFail', $this->Cookie, $user);
 			$this->delete();
 			return;
@@ -264,7 +264,7 @@ class AutoLoginComponent extends Component {
 		);
 
 		if ($this->settings['debug'] && isset($scopes[$key])) {
-			$debug = (array) Configure::read('AutoLogin');
+			$debug = (array)Configure::read('AutoLogin');
 			$content = "";
 
 			if (!empty($cookie) || !empty($user)) {
@@ -279,7 +279,7 @@ class AutoLoginComponent extends Component {
 				$content = 'No debug information.';
 			}
 
-			if (empty($debug['scope']) || in_array($key, (array) $debug['scope'])) {
+			if (empty($debug['scope']) || in_array($key, (array)$debug['scope'])) {
 				if (!empty($debug['email'])) {
 					mail($debug['email'], '[AutoLogin] ' . $scopes[$key], $content, 'From: ' . $debug['email']);
 				} else {
