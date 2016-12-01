@@ -240,7 +240,7 @@ class AutoLoginComponent extends Component {
 		}
 
 		// Is called after user login/logout validates, but before auth redirects
-		if ($controller->plugin === Inflector::camelize($this->plugin) && $controller->name === Inflector::camelize($this->controller)) {
+		if ($controller->plugin == Inflector::camelize($this->plugin) && $controller->name === Inflector::camelize($this->controller)) {
 			$data = $controller->request->data;
 			$action = isset($controller->request->params['action']) ? $controller->request->params['action'] : 'login';
 
@@ -269,7 +269,7 @@ class AutoLoginComponent extends Component {
 	}
 
 	/**
-	 * Read the AutoLogin cookie and base64_decode().
+	 * Read the AutoLogin cookie.
 	 *
 	 * @access public
 	 * @return array|null
@@ -279,14 +279,6 @@ class AutoLoginComponent extends Component {
 
 		if (empty($cookie) || !is_array($cookie)) {
 			return null;
-		}
-
-		if (isset($cookie['username'])) {
-			$cookie['username'] = base64_decode($cookie['username']);
-		}
-
-		if (isset($cookie['password'])) {
-			$cookie['password'] = base64_decode($cookie['password']);
 		}
 
 		return $cookie;
@@ -304,8 +296,8 @@ class AutoLoginComponent extends Component {
 		$time = time();
 
 		$cookie = array();
-		$cookie['username'] = base64_encode($username);
-		$cookie['password'] = base64_encode($password);
+		$cookie['username'] = $username;
+		$cookie['password'] = $password;
 		$cookie['hash'] = $this->Auth->password($username . $time);
 		$cookie['time'] = $time;
 
